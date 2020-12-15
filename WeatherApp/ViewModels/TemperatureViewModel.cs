@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using WeatherApp.Commands;
 using WeatherApp.Models;
@@ -16,7 +17,7 @@ namespace WeatherApp.ViewModels
         public ITemperatureService TemperatureService { get; private set; }
 
         public DelegateCommand<string> GetTempCommand { get; set; }
-
+  
         public TemperatureModel CurrentTemp 
         { 
             get => currentTemp;
@@ -96,16 +97,16 @@ namespace WeatherApp.ViewModels
 
             if (CurrentTemp != null)
             {
-                /// TODO 01 : Insérer la température à la position 0 de la collection
-                /// Description détaillée :
-                /// À chaque fois que l'on clique sur le bouton "Get Data". On veut 
-                /// insérer la température à la position 0 de la collection.
-                /// La température n'est insérée que si la date/heure ET la ville de la
-                /// dernière température insérée dans la liste est différente
-                /// que celle que l'on vient de récupérer.
-                /// Utiliser la méthode Insert de la collection
-
+                RawText = CurrentTemp.ToString();
+                //RawText = CurrentTemp.ToString() + Environment.NewLine + RawText;
                 Debug.WriteLine(CurrentTemp);
+                if (temperatures.Count == 0)
+                    Temperatures.Insert(0, currentTemp);
+                else if (currentTemp.City != temperatures[0].City && currentTemp.DateTime != temperatures[0].DateTime)
+                    Temperatures.Insert(0, currentTemp);
+                else
+                    MessageBox.Show("Cannot Search Twice");
+
             }
         }
 
